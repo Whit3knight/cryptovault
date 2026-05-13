@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Sign Up — CryptoVault</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" />
+  <link rel="stylesheet" href="../css/style.css" />
+  <style>
+    .auth-layout {
+      min-height: 100vh;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+    }
+
+    .auth-panel { display: flex; align-items: center; justify-content: center; padding: 4rem 2rem; order: 1; }
+    .auth-form-box { width: 100%; max-width: 440px; }
+    .auth-title { font-family: var(--font-display); font-size: 1.6rem; font-weight: 700; margin-bottom: 0.4rem; }
+    .auth-sub { color: var(--text-secondary); font-size: 0.88rem; margin-bottom: 2rem; }
+    .auth-sub a { color: var(--accent); text-decoration: none; }
+    .auth-sub a:hover { text-decoration: underline; }
+
+    .step-indicator { display: flex; gap: 0.4rem; margin-bottom: 1.8rem; }
+    .step-dot { height: 3px; flex: 1; border-radius: 2px; background: var(--border); }
+    .step-dot.active { background: var(--accent); }
+
+    .strength-bar { height: 3px; flex: 1; border-radius: 2px; background: var(--border); transition: background 0.3s; }
+    .strength-label { font-family: var(--font-mono); font-size: 0.65rem; color: var(--text-muted); margin-top: 0.3rem; }
+
+    .auth-visual {
+      background: var(--bg-secondary);
+      border-left: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 4rem;
+      position: relative;
+      overflow: hidden;
+      order: 2;
+    }
+
+    .auth-visual::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(ellipse at 70% 30%, rgba(0,255,136,0.07) 0%, transparent 50%),
+        radial-gradient(ellipse at 20% 80%, rgba(0,207,255,0.05) 0%, transparent 50%);
+    }
+
+    .auth-visual-content { position: relative; z-index: 1; max-width: 380px; }
+    .auth-logo { font-family: var(--font-display); font-size: 1.5rem; font-weight: 700; color: var(--accent); letter-spacing: 0.1em; margin-bottom: 2.5rem; display: flex; align-items: center; gap: 0.5rem; }
+    .auth-logo::before { content: '◈'; animation: pulse 2s ease-in-out infinite; }
+    .auth-visual h2 { font-family: var(--font-display); font-size: 2rem; font-weight: 700; line-height: 1.2; margin-bottom: 1rem; }
+    .auth-visual p { color: var(--text-secondary); line-height: 1.7; font-size: 0.95rem; }
+
+    .promo-box { background: var(--accent-dim); border: 1px solid rgba(0,255,136,0.2); border-radius: 4px; padding: 1.2rem 1.5rem; margin-bottom: 1.5rem; }
+    .promo-tag { font-family: var(--font-mono); font-size: 0.65rem; color: var(--accent); letter-spacing: 0.2em; text-transform: uppercase; margin-bottom: 0.4rem; }
+    .promo-value { font-family: var(--font-display); font-size: 1.3rem; font-weight: 700; color: var(--accent); }
+    .promo-desc { font-size: 0.8rem; color: var(--text-secondary); margin-top: 0.2rem; }
+
+    @media (max-width: 768px) {
+      .auth-layout { grid-template-columns: 1fr; }
+      .auth-visual { display: none; }
+      .auth-panel { padding: 2rem 1.2rem; padding-top: 5rem; order: 1; }
+    }
+  </style>
+</head>
+<body>
+
+  <nav class="cv-nav">
+    <a href="../index.html" class="nav-logo">CryptoVault</a>
+    <ul class="nav-links">
+      <li><a href="../index.html">Home</a></li>
+      <li><a href="market.html">Market</a></li>
+      <li><a href="dashboard.html">Dashboard</a></li>
+      <li><a href="about.html">About</a></li>
+      <li><a href="contact.html">Contact</a></li>
+    </ul>
+    <div class="nav-cta">
+      <a href="signin.html" class="btn-cv btn-cv-outline">Sign In</a>
+      <a href="signup.html" class="btn-cv btn-cv-primary">Sign Up</a>
+    </div>
+    <button class="hamburger" id="hamburger" aria-label="Menu">
+      <span></span><span></span><span></span>
+    </button>
+  </nav>
+
+  <div class="cv-mobile-menu" id="cv-mobile-menu">
+    <a href="../index.html">Home</a>
+    <a href="market.html">Market</a>
+    <a href="dashboard.html">Dashboard</a>
+    <a href="about.html">About</a>
+    <a href="contact.html">Contact</a>
+    <a href="signin.html">Sign In</a>
+    <a href="signup.html">Sign Up</a>
+  </div>
+
+  <div class="auth-layout">
+    <div class="auth-panel">
+      <div class="auth-form-box">
+        <div class="auth-title">Buat Akun</div>
+        <div class="auth-sub">Sudah punya akun? <a href="signin.html">Masuk di sini →</a></div>
+
+        <div class="step-indicator">
+          <div class="step-dot active"></div>
+          <div class="step-dot active"></div>
+          <div class="step-dot"></div>
+        </div>
+
+        <!-- Bootstrap row g-3 untuk dua kolom nama -->
+        <div class="row g-3 mb-0">
+          <div class="col-6">
+            <label class="form-label">Nama Depan</label>
+            <input type="text" class="form-control" placeholder="John" />
+          </div>
+          <div class="col-6">
+            <label class="form-label">Nama Belakang</label>
+            <input type="text" class="form-control" placeholder="Doe" />
+          </div>
+        </div>
+
+        <div class="mt-3">
+          <label class="form-label">Email Address</label>
+          <input type="email" class="form-control" placeholder="trader@email.com" />
+        </div>
+
+        <div class="mt-3">
+          <label class="form-label">Nomor Telepon</label>
+          <input type="tel" class="form-control" placeholder="+62 812 3456 7890" />
+        </div>
+
+        <div class="mt-3">
+          <label class="form-label">Password</label>
+          <input type="password" class="form-control" placeholder="Min. 8 karakter" id="pw-input" />
+          <div class="d-flex gap-1 mt-1">
+            <div class="strength-bar" id="s1"></div>
+            <div class="strength-bar" id="s2"></div>
+            <div class="strength-bar" id="s3"></div>
+            <div class="strength-bar" id="s4"></div>
+          </div>
+          <div class="strength-label" id="strength-label">Masukkan password</div>
+        </div>
+
+        <div class="mt-3">
+          <label class="form-label">Konfirmasi Password</label>
+          <input type="password" class="form-control" placeholder="••••••••••••" />
+        </div>
+
+        <div class="mt-3">
+          <label class="form-label">Referral Code <span style="color:var(--text-muted);font-size:0.65rem">(opsional)</span></label>
+          <input type="text" class="form-control" placeholder="VAULT2024" />
+        </div>
+
+        <!-- Bootstrap form-check -->
+        <div class="form-check mt-3">
+          <input class="form-check-input" type="checkbox" id="terms" />
+          <label class="form-check-label" for="terms">
+            Saya setuju dengan <a href="#" style="color:var(--accent)">Syarat & Ketentuan</a> dan <a href="#" style="color:var(--accent)">Kebijakan Privasi</a> CryptoVault.
+          </label>
+        </div>
+
+        <div class="form-check mt-2">
+          <input class="form-check-input" type="checkbox" id="news" />
+          <label class="form-check-label" for="news">Kirimkan saya update pasar dan promo terbaru.</label>
+        </div>
+
+        <button class="btn-cv btn-cv-primary btn-cv-lg w-100 mt-4" onclick="window.location.href='dashboard.html'">
+          Buat Akun Gratis
+        </button>
+
+        <div class="d-flex align-items-center justify-content-center gap-2 mt-3 font-mono" style="font-size:0.68rem;color:var(--text-muted)">
+          🔒 Data dilindungi enkripsi SSL 256-bit
+        </div>
+      </div>
+    </div>
+
+    <div class="auth-visual">
+      <div class="auth-visual-content">
+        <div class="auth-logo">CryptoVault</div>
+        <div class="promo-box">
+          <div class="promo-tag">🎁 Welcome Bonus</div>
+          <div class="promo-value">Fee 0% — 30 Hari</div>
+          <div class="promo-desc">Trading gratis tanpa biaya untuk member baru!</div>
+        </div>
+        <h2>Mulai Perjalanan <span style="color:var(--accent)">Kripto</span>-mu</h2>
+        <p>Bergabunglah bersama 1.2 juta trader Indonesia. Akun gratis, setup dalam 2 menit.</p>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="../js/main.js"></script>
+  <script>
+    var pwInput = document.getElementById('pw-input');
+    var bars = [document.getElementById('s1'), document.getElementById('s2'), document.getElementById('s3'), document.getElementById('s4')];
+    var strengthLabel = document.getElementById('strength-label');
+    var colors = ['#ff4466', '#ffaa00', '#00cfff', '#00ff88'];
+    var labels = ['Lemah', 'Cukup', 'Kuat', 'Sangat Kuat'];
+
+    pwInput.addEventListener('input', function () {
+      var val = this.value;
+      var score = 0;
+      if (val.length >= 8) score++;
+      if (/[A-Z]/.test(val)) score++;
+      if (/[0-9]/.test(val)) score++;
+      if (/[^A-Za-z0-9]/.test(val)) score++;
+      bars.forEach(function (b, i) { b.style.background = i < score ? colors[score - 1] : 'var(--border)'; });
+      strengthLabel.textContent = val.length === 0 ? 'Masukkan password' : (labels[score - 1] || 'Terlalu pendek');
+      strengthLabel.style.color = val.length === 0 ? 'var(--text-muted)' : colors[score - 1];
+    });
+  </script>
+</body>
+</html>

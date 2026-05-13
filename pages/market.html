@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Market — CryptoVault</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" />
+  <link rel="stylesheet" href="../css/style.css" />
+  <style>
+    .summary-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      padding: 1.2rem 1.5rem;
+    }
+
+    .summary-label {
+      font-family: var(--font-mono);
+      font-size: 0.68rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      margin-bottom: 0.4rem;
+    }
+
+    .summary-value {
+      font-family: var(--font-display);
+      font-size: 1.2rem;
+      font-weight: 700;
+    }
+
+    .summary-sub {
+      font-family: var(--font-mono);
+      font-size: 0.72rem;
+      color: var(--accent);
+      margin-top: 0.2rem;
+    }
+
+    .filter-btn {
+      font-family: var(--font-mono);
+      font-size: 0.72rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      padding: 0.45rem 1rem;
+      border: 1px solid var(--border);
+      border-radius: 2px;
+      background: transparent;
+      color: var(--text-secondary);
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .filter-btn:hover,
+    .filter-btn.active {
+      border-color: var(--accent);
+      color: var(--accent);
+      background: var(--accent-dim);
+    }
+
+    .coin-dot {
+      width: 34px; height: 34px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: var(--font-display);
+      font-size: 0.58rem;
+      font-weight: 700;
+      color: #fff;
+      flex-shrink: 0;
+    }
+
+    .coin-fullname { font-size: 0.75rem; color: var(--text-muted); font-family: var(--font-mono); }
+
+    .page-btn {
+      width: 36px; height: 36px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border: 1px solid var(--border);
+      border-radius: 2px;
+      font-family: var(--font-mono);
+      font-size: 0.78rem;
+      color: var(--text-secondary);
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .page-btn:hover,
+    .page-btn.active {
+      border-color: var(--accent);
+      color: var(--accent);
+      background: var(--accent-dim);
+    }
+  </style>
+</head>
+<body>
+
+  <nav class="cv-nav">
+    <a href="../index.html" class="nav-logo">CryptoVault</a>
+    <ul class="nav-links">
+      <li><a href="../index.html">Home</a></li>
+      <li><a href="market.html">Market</a></li>
+      <li><a href="dashboard.html">Dashboard</a></li>
+      <li><a href="about.html">About</a></li>
+      <li><a href="contact.html">Contact</a></li>
+    </ul>
+    <div class="nav-cta">
+      <a href="signin.html" class="btn-cv btn-cv-outline">Sign In</a>
+      <a href="signup.html" class="btn-cv btn-cv-primary">Sign Up</a>
+    </div>
+    <button class="hamburger" id="hamburger" aria-label="Menu">
+      <span></span><span></span><span></span>
+    </button>
+  </nav>
+
+  <div class="cv-mobile-menu" id="cv-mobile-menu">
+    <a href="../index.html">Home</a>
+    <a href="market.html">Market</a>
+    <a href="dashboard.html">Dashboard</a>
+    <a href="about.html">About</a>
+    <a href="contact.html">Contact</a>
+    <a href="signin.html">Sign In</a>
+    <a href="signup.html">Sign Up</a>
+  </div>
+
+  <div class="ticker-bar" style="margin-top:68px">
+    <div class="ticker-track"></div>
+  </div>
+
+  <section style="padding-top:3rem">
+    <div class="container">
+      <div class="py-4 mb-4" data-aos>
+        <div class="section-tag">Live Prices</div>
+        <h1 class="section-title">Pasar <span class="highlight">Crypto</span> Global</h1>
+        <p class="section-sub">Data harga real-time untuk 350+ aset digital.</p>
+      </div>
+
+      <!-- Summary Cards — Bootstrap row/col -->
+      <div class="row g-3 mb-4" data-aos>
+        <div class="col-6 col-lg-3">
+          <div class="summary-card">
+            <div class="summary-label">Total Market Cap</div>
+            <div class="summary-value">$2.41T</div>
+            <div class="summary-sub">▲ +1.84%</div>
+          </div>
+        </div>
+        <div class="col-6 col-lg-3">
+          <div class="summary-card">
+            <div class="summary-label">Volume 24H</div>
+            <div class="summary-value">$94.2B</div>
+            <div class="summary-sub">▲ +12.3%</div>
+          </div>
+        </div>
+        <div class="col-6 col-lg-3">
+          <div class="summary-card">
+            <div class="summary-label">BTC Dominance</div>
+            <div class="summary-value">52.4%</div>
+            <div class="summary-sub" style="color:var(--accent2)">● Stabil</div>
+          </div>
+        </div>
+        <div class="col-6 col-lg-3">
+          <div class="summary-card">
+            <div class="summary-label">Fear & Greed</div>
+            <div class="summary-value" style="color:var(--warning)">72</div>
+            <div class="summary-sub" style="color:var(--warning)">Greed</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Filter bar — Bootstrap d-flex gap-2 -->
+      <div class="d-flex gap-2 flex-wrap align-items-center mb-4">
+        <button class="filter-btn active">All</button>
+        <button class="filter-btn">DeFi</button>
+        <button class="filter-btn">Layer 1</button>
+        <button class="filter-btn">Layer 2</button>
+        <button class="filter-btn">Stablecoins</button>
+        <button class="filter-btn">NFT</button>
+        <!-- Bootstrap ms-auto untuk push ke kanan -->
+        <div class="ms-auto position-relative" style="min-width:200px">
+          <span style="position:absolute;left:0.65rem;top:50%;transform:translateY(-50%);color:var(--text-muted);font-size:1rem;pointer-events:none">⌕</span>
+          <!-- Bootstrap form-control -->
+          <input type="text" class="form-control" style="padding-left:2.2rem" placeholder="Cari koin..." id="search-input" />
+        </div>
+      </div>
+
+      <!-- Bootstrap table-responsive + table -->
+      <div class="table-responsive" data-aos>
+        <table class="table table-hover align-middle">
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Nama</th>
+              <th>Harga</th>
+              <th>24H %</th>
+              <th class="d-none d-lg-table-cell">7D %</th>
+              <th class="d-none d-md-table-cell">Market Cap</th>
+              <th class="d-none d-md-table-cell">Volume 24H</th>
+              <th>7D Chart</th>
+            </tr>
+          </thead>
+          <tbody id="market-tbody"></tbody>
+        </table>
+      </div>
+
+      <!-- Pagination — Bootstrap d-flex justify-content-center gap-2 -->
+      <div class="d-flex justify-content-center gap-2 mt-4" data-aos>
+        <div class="page-btn active">1</div>
+        <div class="page-btn">2</div>
+        <div class="page-btn">3</div>
+        <div class="page-btn">…</div>
+        <div class="page-btn">35</div>
+      </div>
+    </div>
+  </section>
+
+  <footer class="cv-footer">
+    <div class="container">
+      <div class="row g-4 mb-4">
+        <div class="col-md-5">
+          <a href="../index.html" class="nav-logo d-inline-flex mb-3">CryptoVault</a>
+          <p class="footer-desc">Platform exchange kripto terpercaya untuk trader Indonesia.</p>
+        </div>
+        <div class="col-6 col-md-2 offset-md-1">
+          <div class="footer-col-title">Platform</div>
+          <ul class="footer-links">
+            <li><a href="market.html">Market</a></li>
+            <li><a href="dashboard.html">Dashboard</a></li>
+          </ul>
+        </div>
+        <div class="col-6 col-md-2">
+          <div class="footer-col-title">Perusahaan</div>
+          <ul class="footer-links">
+            <li><a href="about.html">About Us</a></li>
+            <li><a href="contact.html">Contact</a></li>
+          </ul>
+        </div>
+        <div class="col-6 col-md-2">
+          <div class="footer-col-title">Akun</div>
+          <ul class="footer-links">
+            <li><a href="signin.html">Sign In</a></li>
+            <li><a href="signup.html">Sign Up</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom d-flex justify-content-between flex-wrap gap-2">
+        <span>© 2024 CryptoVault. All rights reserved.</span>
+        <span class="font-mono"><span class="up">●</span> All systems operational</span>
+      </div>
+    </div>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="../js/main.js"></script>
+  <script>
+    var COINS = [
+      { rank:1,  symbol:'BTC',  name:'Bitcoin',   price:'$67,420.50', d1:'+2.14%', d7:'+8.42%',  up1:true,  up7:true,  mcap:'$1.33T', vol:'$42.1B', color:'linear-gradient(135deg,#f7931a,#ffb347)' },
+      { rank:2,  symbol:'ETH',  name:'Ethereum',  price:'$3,512.80',  d1:'+1.87%', d7:'+6.20%',  up1:true,  up7:true,  mcap:'$421.8B',vol:'$18.4B', color:'linear-gradient(135deg,#627eea,#a78bfa)' },
+      { rank:3,  symbol:'BNB',  name:'BNB',       price:'$412.60',    d1:'-0.45%', d7:'+2.10%',  up1:false, up7:true,  mcap:'$60.4B', vol:'$2.1B',  color:'linear-gradient(135deg,#f0b90b,#fcd535)' },
+      { rank:4,  symbol:'SOL',  name:'Solana',    price:'$182.40',    d1:'+4.23%', d7:'+14.8%',  up1:true,  up7:true,  mcap:'$84.1B', vol:'$5.8B',  color:'linear-gradient(135deg,#9945ff,#14f195)' },
+      { rank:5,  symbol:'XRP',  name:'XRP',       price:'$0.548',     d1:'+0.32%', d7:'-1.20%',  up1:true,  up7:false, mcap:'$30.2B', vol:'$1.4B',  color:'linear-gradient(135deg,#006097,#0098d8)' },
+      { rank:6,  symbol:'USDC', name:'USD Coin',  price:'$1.00',      d1:'+0.01%', d7:'0.00%',   up1:true,  up7:true,  mcap:'$28.4B', vol:'$6.1B',  color:'linear-gradient(135deg,#2775ca,#5dadec)' },
+      { rank:7,  symbol:'ADA',  name:'Cardano',   price:'$0.612',     d1:'+0.98%', d7:'+3.45%',  up1:true,  up7:true,  mcap:'$21.8B', vol:'$612M',  color:'linear-gradient(135deg,#0033ad,#00aaff)' },
+      { rank:8,  symbol:'AVAX', name:'Avalanche', price:'$42.15',     d1:'+3.01%', d7:'+9.80%',  up1:true,  up7:true,  mcap:'$17.4B', vol:'$842M',  color:'linear-gradient(135deg,#e84142,#ff6b6b)' },
+      { rank:9,  symbol:'DOGE', name:'Dogecoin',  price:'$0.187',     d1:'+1.54%', d7:'+5.20%',  up1:true,  up7:true,  mcap:'$27.1B', vol:'$1.9B',  color:'linear-gradient(135deg,#c2a633,#e8cc5a)' },
+      { rank:10, symbol:'DOT',  name:'Polkadot',  price:'$9.87',      d1:'-1.22%', d7:'-3.40%',  up1:false, up7:false, mcap:'$13.8B', vol:'$412M',  color:'linear-gradient(135deg,#e6007a,#ff69b4)' },
+      { rank:11, symbol:'LINK', name:'Chainlink', price:'$18.34',     d1:'+1.45%', d7:'+7.10%',  up1:true,  up7:true,  mcap:'$10.8B', vol:'$524M',  color:'linear-gradient(135deg,#2a5ada,#5b8def)' },
+      { rank:12, symbol:'MATIC',name:'Polygon',   price:'$0.874',     d1:'-0.67%', d7:'+1.20%',  up1:false, up7:true,  mcap:'$8.1B',  vol:'$298M',  color:'linear-gradient(135deg,#8247e5,#a97af8)' },
+      { rank:13, symbol:'UNI',  name:'Uniswap',   price:'$11.24',     d1:'+2.88%', d7:'+10.4%',  up1:true,  up7:true,  mcap:'$6.8B',  vol:'$214M',  color:'linear-gradient(135deg,#ff007a,#ff69b4)' },
+      { rank:14, symbol:'ATOM', name:'Cosmos',    price:'$9.41',      d1:'-0.88%', d7:'-2.10%',  up1:false, up7:false, mcap:'$3.7B',  vol:'$162M',  color:'linear-gradient(135deg,#2e3148,#6b7db3)' },
+      { rank:15, symbol:'LTC',  name:'Litecoin',  price:'$84.20',     d1:'+0.72%', d7:'+2.80%',  up1:true,  up7:true,  mcap:'$6.2B',  vol:'$482M',  color:'linear-gradient(135deg,#bfbbbb,#d8d8d8)' },
+    ];
+
+    function sparkline(up) {
+      var pts = up ? '0,22 13,18 26,20 39,14 52,10 65,7 80,4' : '0,6 13,10 26,8 39,14 52,16 65,18 80,22';
+      return '<svg width="80" height="28" viewBox="0 0 80 28"><polyline points="' + pts + '" stroke="' + (up ? '#00ff88' : '#ff4466') + '" stroke-width="1.5" fill="none"/></svg>';
+    }
+
+    document.getElementById('market-tbody').innerHTML = COINS.map(function (c) {
+      return '<tr>'
+        + '<td class="font-mono" style="color:var(--text-muted);font-size:0.78rem">' + String(c.rank).padStart(2, '0') + '</td>'
+        + '<td><div class="d-flex align-items-center gap-2"><div class="coin-dot" style="background:' + c.color + '">' + c.symbol.slice(0,4) + '</div><div><div style="font-weight:500">' + c.name + '</div><div class="coin-fullname">' + c.symbol + '</div></div></div></td>'
+        + '<td class="font-mono">' + c.price + '</td>'
+        + '<td class="font-mono ' + (c.up1 ? 'up' : 'down') + '">' + c.d1 + '</td>'
+        + '<td class="font-mono d-none d-lg-table-cell ' + (c.up7 ? 'up' : 'down') + '">' + c.d7 + '</td>'
+        + '<td class="font-mono d-none d-md-table-cell" style="color:var(--text-secondary)">' + c.mcap + '</td>'
+        + '<td class="font-mono d-none d-md-table-cell" style="color:var(--text-secondary)">' + c.vol + '</td>'
+        + '<td>' + sparkline(c.up7) + '</td>'
+        + '</tr>';
+    }).join('');
+
+    document.querySelectorAll('.filter-btn').forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        document.querySelectorAll('.filter-btn').forEach(function (b) { b.classList.remove('active'); });
+        btn.classList.add('active');
+      });
+    });
+
+    document.getElementById('search-input').addEventListener('input', function () {
+      var q = this.value.toLowerCase();
+      document.querySelectorAll('#market-tbody tr').forEach(function (row) {
+        row.style.display = row.textContent.toLowerCase().includes(q) ? '' : 'none';
+      });
+    });
+  </script>
+</body>
+</html>

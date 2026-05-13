@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Dashboard — CryptoVault</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" />
+  <link rel="stylesheet" href="../css/style.css" />
+  <style>
+    .dashboard-layout {
+      display: grid;
+      grid-template-columns: 260px 1fr;
+      min-height: calc(100vh - 68px);
+      margin-top: 68px;
+    }
+
+    .sidebar {
+      background: rgba(0,0,0,0.3);
+      border-right: 1px solid var(--border);
+      padding: 2rem 1.2rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.4rem;
+      position: sticky;
+      top: 68px;
+      height: calc(100vh - 68px);
+      overflow-y: auto;
+    }
+
+    .sidebar-section {
+      font-family: var(--font-mono);
+      font-size: 0.62rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      padding: 0.8rem 0.6rem 0.4rem;
+      margin-top: 0.5rem;
+    }
+
+    .sidebar-item {
+      display: flex;
+      align-items: center;
+      gap: 0.7rem;
+      padding: 0.65rem 0.8rem;
+      border-radius: 3px;
+      color: var(--text-secondary);
+      font-size: 0.85rem;
+      cursor: pointer;
+      transition: all 0.2s;
+      text-decoration: none;
+    }
+
+    .sidebar-item:hover { background: var(--accent-dim); color: var(--accent); }
+    .sidebar-item.active { background: var(--accent-dim); color: var(--accent); border-left: 2px solid var(--accent); }
+    .sidebar-icon { font-size: 0.95rem; width: 18px; text-align: center; }
+
+    .dash-main { padding: 2rem 2.5rem; overflow-x: hidden; }
+
+    .dash-greeting { font-family: var(--font-display); font-size: 1.5rem; font-weight: 700; }
+    .dash-greeting span { color: var(--accent); }
+    .dash-date { font-family: var(--font-mono); font-size: 0.72rem; color: var(--text-muted); margin-top: 0.2rem; }
+
+    .dash-stat-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      padding: 1.3rem 1.5rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .dash-stat-card::after {
+      content: '';
+      position: absolute;
+      bottom: 0; left: 0; right: 0;
+      height: 2px;
+      background: var(--accent);
+      opacity: 0.3;
+    }
+
+    .dash-stat-label { font-family: var(--font-mono); font-size: 0.65rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--text-muted); margin-bottom: 0.5rem; }
+    .dash-stat-value { font-family: var(--font-display); font-size: 1.35rem; font-weight: 700; }
+    .dash-stat-sub { font-family: var(--font-mono); font-size: 0.7rem; margin-top: 0.2rem; }
+
+    .dash-card { background: var(--bg-card); border: 1px solid var(--border); border-radius: 4px; padding: 1.5rem; }
+    .dash-card-title { font-family: var(--font-display); font-size: 0.85rem; font-weight: 600; letter-spacing: 0.05em; margin-bottom: 1.2rem; }
+    .dash-card-link { font-family: var(--font-mono); font-size: 0.68rem; color: var(--accent); text-decoration: none; letter-spacing: 0.1em; }
+
+    .donut {
+      width: 130px; height: 130px;
+      border-radius: 50%;
+      background: conic-gradient(#f7931a 0deg 188deg, #627eea 188deg 278deg, #9945ff 278deg 323deg, #f0b90b 323deg 340deg, #3d6652 340deg 360deg);
+      display: flex; align-items: center; justify-content: center;
+      position: relative; flex-shrink: 0;
+    }
+
+    .donut::after { content: ''; position: absolute; width: 80px; height: 80px; background: var(--bg-secondary); border-radius: 50%; }
+
+    .legend-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+    .legend-pct { font-family: var(--font-mono); font-size: 0.72rem; color: var(--text-muted); }
+
+    .area-chart svg { width: 100%; height: 150px; }
+
+    .holding-item { padding: 0.8rem 0; border-bottom: 1px solid rgba(0,255,136,0.05); }
+    .holding-item:last-child { border-bottom: none; }
+    .holding-icon { width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-family: var(--font-display); font-size: 0.56rem; font-weight: 700; color: #fff; flex-shrink: 0; }
+    .holding-name { font-size: 0.88rem; font-weight: 500; }
+    .holding-amount { font-family: var(--font-mono); font-size: 0.72rem; color: var(--text-muted); }
+    .holding-value { font-family: var(--font-mono); font-size: 0.88rem; }
+    .holding-change { font-family: var(--font-mono); font-size: 0.7rem; }
+
+    .tx-icon { width: 34px; height: 34px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 0.9rem; flex-shrink: 0; }
+    .tx-icon.buy { background: rgba(0,255,136,0.1); }
+    .tx-icon.sell { background: rgba(255,68,102,0.1); }
+    .tx-name { font-size: 0.85rem; }
+    .tx-time { font-family: var(--font-mono); font-size: 0.68rem; color: var(--text-muted); }
+    .tx-amount { font-family: var(--font-mono); font-size: 0.85rem; }
+
+    @media (max-width: 992px) {
+      .dashboard-layout { grid-template-columns: 1fr; }
+      .sidebar { display: none; }
+      .dash-main { padding: 1.5rem 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <nav class="cv-nav">
+    <a href="../index.html" class="nav-logo">CryptoVault</a>
+    <ul class="nav-links">
+      <li><a href="../index.html">Home</a></li>
+      <li><a href="market.html">Market</a></li>
+      <li><a href="dashboard.html">Dashboard</a></li>
+      <li><a href="about.html">About</a></li>
+      <li><a href="contact.html">Contact</a></li>
+    </ul>
+    <div class="nav-cta">
+      <a href="signin.html" class="btn-cv btn-cv-outline">Sign In</a>
+      <a href="signup.html" class="btn-cv btn-cv-primary">Sign Up</a>
+    </div>
+    <button class="hamburger" id="hamburger" aria-label="Menu">
+      <span></span><span></span><span></span>
+    </button>
+  </nav>
+
+  <div class="cv-mobile-menu" id="cv-mobile-menu">
+    <a href="../index.html">Home</a>
+    <a href="market.html">Market</a>
+    <a href="dashboard.html">Dashboard</a>
+    <a href="about.html">About</a>
+    <a href="contact.html">Contact</a>
+    <a href="signin.html">Sign In</a>
+    <a href="signup.html">Sign Up</a>
+  </div>
+
+  <!-- Bootstrap Modal — Deposit -->
+  <div class="modal fade" id="depositModal" tabindex="-1" aria-labelledby="depositModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="depositModalLabel">⬇ Deposit Dana</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <!-- Bootstrap form-group + form-control dalam modal -->
+          <div class="mb-3">
+            <label class="form-label">Metode Deposit</label>
+            <select class="form-select">
+              <option>Transfer Bank (BCA, BNI, BRI, Mandiri)</option>
+              <option>Virtual Account</option>
+              <option>QRIS</option>
+              <option>Deposit Kripto</option>
+            </select>
+          </div>
+          <div class="mb-3">
+            <label class="form-label">Jumlah (IDR)</label>
+            <input type="number" class="form-control" placeholder="Minimal Rp 10.000" />
+          </div>
+          <div class="mb-0">
+            <label class="form-label">Catatan (opsional)</label>
+            <input type="text" class="form-control" placeholder="Referensi transfer..." />
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn-cv btn-cv-outline" data-bs-dismiss="modal">Batal</button>
+          <button type="button" class="btn-cv btn-cv-primary" data-bs-dismiss="modal">Konfirmasi Deposit</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Bootstrap Modal — Withdraw -->
+  <div class="modal fade" id="withdrawModal" tabindex="-1" aria-labelledby="withdrawModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="withdrawModalLabel">⬆ Withdraw Dana</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <div class="mb-3">
+            <label class="form-label">Aset</label>
+            <select class="form-select">
+              <option>IDR — Rupiah</option>
+              <option>BTC — Bitcoin</option>
+              <option>ETH — Ethereum</option>
+              <option>USDC — USD Coin</option>
+            </select>
+          </div>
+          <div class="mb-3">
+            <label class="form-label">Jumlah</label>
+            <input type="number" class="form-control" placeholder="0.00" />
+          </div>
+          <div class="mb-0">
+            <label class="form-label">Alamat / Rekening Tujuan</label>
+            <input type="text" class="form-control" placeholder="No. rekening atau wallet address" />
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn-cv btn-cv-outline" data-bs-dismiss="modal">Batal</button>
+          <button type="button" class="btn-cv btn-cv-primary" data-bs-dismiss="modal">Konfirmasi Withdraw</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="dashboard-layout">
+    <aside class="sidebar">
+      <div class="sidebar-section">Overview</div>
+      <a class="sidebar-item active" href="#"><span class="sidebar-icon">◈</span> Dashboard</a>
+      <a class="sidebar-item" href="market.html"><span class="sidebar-icon">📊</span> Market</a>
+      <div class="sidebar-section">Trading</div>
+      <a class="sidebar-item" href="#"><span class="sidebar-icon">⚡</span> Spot Trading</a>
+      <a class="sidebar-item" href="#"><span class="sidebar-icon">📈</span> Futures</a>
+      <a class="sidebar-item" href="#"><span class="sidebar-icon">🤖</span> Bot Trading</a>
+      <div class="sidebar-section">Wallet</div>
+      <a class="sidebar-item" href="#"><span class="sidebar-icon">💰</span> Portfolio</a>
+      <a class="sidebar-item" href="#" data-bs-toggle="modal" data-bs-target="#depositModal"><span class="sidebar-icon">⬇</span> Deposit</a>
+      <a class="sidebar-item" href="#" data-bs-toggle="modal" data-bs-target="#withdrawModal"><span class="sidebar-icon">⬆</span> Withdraw</a>
+      <a class="sidebar-item" href="#"><span class="sidebar-icon">↔</span> Riwayat</a>
+      <div class="sidebar-section">Akun</div>
+      <a class="sidebar-item" href="#"><span class="sidebar-icon">👤</span> Profil</a>
+      <a class="sidebar-item" href="#"><span class="sidebar-icon">🔐</span> Keamanan</a>
+      <a class="sidebar-item" href="signin.html" style="color:var(--danger)"><span class="sidebar-icon">⏻</span> Keluar</a>
+    </aside>
+
+    <main class="dash-main">
+      <!-- Bootstrap d-flex justify-content-between untuk header -->
+      <div class="d-flex justify-content-between align-items-start flex-wrap gap-3 mb-4">
+        <div>
+          <div class="dash-greeting">Selamat Datang, <span>Trader</span> 👋</div>
+          <div class="dash-date" id="dash-date"></div>
+        </div>
+        <!-- Bootstrap data-bs-toggle="modal" untuk tombol -->
+        <div class="d-flex gap-2">
+          <button class="btn-cv btn-cv-outline" style="font-size:0.72rem;padding:0.5rem 1rem" data-bs-toggle="modal" data-bs-target="#depositModal">⬇ Deposit</button>
+          <button class="btn-cv btn-cv-primary" style="font-size:0.72rem;padding:0.5rem 1rem" data-bs-toggle="modal" data-bs-target="#withdrawModal">⬆ Withdraw</button>
+        </div>
+      </div>
+
+      <!-- Stat cards — Bootstrap row/col -->
+      <div class="row g-3 mb-4">
+        <div class="col-6 col-xl-3">
+          <div class="dash-stat-card">
+            <div class="dash-stat-label">Total Aset</div>
+            <div class="dash-stat-value">$24,812.40</div>
+            <div class="dash-stat-sub up">▲ +3.42% hari ini</div>
+          </div>
+        </div>
+        <div class="col-6 col-xl-3">
+          <div class="dash-stat-card">
+            <div class="dash-stat-label">Profit/Loss</div>
+            <div class="dash-stat-value up">+$845.20</div>
+            <div class="dash-stat-sub up">▲ Bulan ini</div>
+          </div>
+        </div>
+        <div class="col-6 col-xl-3">
+          <div class="dash-stat-card">
+            <div class="dash-stat-label">Open Orders</div>
+            <div class="dash-stat-value">3</div>
+            <div class="dash-stat-sub" style="color:var(--accent2)">● 2 BUY · 1 SELL</div>
+          </div>
+        </div>
+        <div class="col-6 col-xl-3">
+          <div class="dash-stat-card">
+            <div class="dash-stat-label">Trading Volume</div>
+            <div class="dash-stat-value">$4,120</div>
+            <div class="dash-stat-sub" style="color:var(--text-muted)">30 hari terakhir</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Chart row — Bootstrap row/col -->
+      <div class="row g-3 mb-3">
+        <div class="col-lg-6">
+          <div class="dash-card">
+            <div class="dash-card-title d-flex justify-content-between">
+              Alokasi Portfolio
+              <a href="#" class="dash-card-link">Detail →</a>
+            </div>
+            <div class="d-flex align-items-center gap-4">
+              <div class="donut"></div>
+              <div class="d-flex flex-column gap-2 flex-grow-1">
+                <div class="d-flex align-items-center gap-2 fs-sm"><div class="legend-dot" style="background:#f7931a"></div>Bitcoin (BTC)<span class="legend-pct ms-auto">52.2%</span></div>
+                <div class="d-flex align-items-center gap-2 fs-sm"><div class="legend-dot" style="background:#627eea"></div>Ethereum (ETH)<span class="legend-pct ms-auto">25.0%</span></div>
+                <div class="d-flex align-items-center gap-2 fs-sm"><div class="legend-dot" style="background:#9945ff"></div>Solana (SOL)<span class="legend-pct ms-auto">12.5%</span></div>
+                <div class="d-flex align-items-center gap-2 fs-sm"><div class="legend-dot" style="background:#f0b90b"></div>BNB<span class="legend-pct ms-auto">4.7%</span></div>
+                <div class="d-flex align-items-center gap-2 fs-sm"><div class="legend-dot" style="background:#3d6652"></div>Lainnya<span class="legend-pct ms-auto">5.6%</span></div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-6">
+          <div class="dash-card">
+            <div class="dash-card-title d-flex justify-content-between">
+              Performa Portfolio
+              <span class="font-mono" style="font-size:0.68rem;color:var(--text-muted)">7D</span>
+            </div>
+            <div class="area-chart">
+              <svg viewBox="0 0 400 150" xmlns="http://www.w3.org/2000/svg">
+                <defs>
+                  <linearGradient id="ag" x1="0%" y1="0%" x2="0%" y2="100%">
+                    <stop offset="0%" style="stop-color:rgba(0,255,136,0.25)"/>
+                    <stop offset="100%" style="stop-color:rgba(0,255,136,0)"/>
+                  </linearGradient>
+                </defs>
+                <line x1="0" y1="38"  x2="400" y2="38"  stroke="rgba(0,255,136,0.06)" stroke-width="1"/>
+                <line x1="0" y1="75"  x2="400" y2="75"  stroke="rgba(0,255,136,0.06)" stroke-width="1"/>
+                <line x1="0" y1="112" x2="400" y2="112" stroke="rgba(0,255,136,0.06)" stroke-width="1"/>
+                <path d="M0,112 L57,98 L114,103 L171,75 L228,82 L285,50 L342,55 L400,38" stroke="#00ff88" stroke-width="2" fill="none"/>
+                <path d="M0,112 L57,98 L114,103 L171,75 L228,82 L285,50 L342,55 L400,38 L400,150 L0,150 Z" fill="url(#ag)"/>
+              </svg>
+            </div>
+            <div class="d-flex justify-content-between font-mono" style="font-size:0.65rem;color:var(--text-muted);margin-top:0.3rem">
+              <span>Sen</span><span>Sel</span><span>Rab</span><span>Kam</span><span>Jum</span><span>Sab</span><span>Min</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Holdings + Transactions — Bootstrap row/col -->
+      <div class="row g-3">
+        <div class="col-lg-6">
+          <div class="dash-card">
+            <div class="dash-card-title d-flex justify-content-between">Aset Saya <a href="#" class="dash-card-link">Lihat Semua →</a></div>
+            <div class="holding-item d-flex align-items-center gap-2">
+              <div class="holding-icon" style="background:linear-gradient(135deg,#f7931a,#ffb347)">BTC</div>
+              <div><div class="holding-name">Bitcoin</div><div class="holding-amount">0.19240 BTC</div></div>
+              <div class="ms-auto text-end"><div class="holding-value">$12,972</div><div class="holding-change up">▲ +2.14%</div></div>
+            </div>
+            <div class="holding-item d-flex align-items-center gap-2">
+              <div class="holding-icon" style="background:linear-gradient(135deg,#627eea,#a78bfa)">ETH</div>
+              <div><div class="holding-name">Ethereum</div><div class="holding-amount">1.7620 ETH</div></div>
+              <div class="ms-auto text-end"><div class="holding-value">$6,189</div><div class="holding-change up">▲ +1.87%</div></div>
+            </div>
+            <div class="holding-item d-flex align-items-center gap-2">
+              <div class="holding-icon" style="background:linear-gradient(135deg,#9945ff,#14f195)">SOL</div>
+              <div><div class="holding-name">Solana</div><div class="holding-amount">17.0 SOL</div></div>
+              <div class="ms-auto text-end"><div class="holding-value">$3,101</div><div class="holding-change up">▲ +4.23%</div></div>
+            </div>
+            <div class="holding-item d-flex align-items-center gap-2">
+              <div class="holding-icon" style="background:linear-gradient(135deg,#f0b90b,#fcd535)">BNB</div>
+              <div><div class="holding-name">BNB</div><div class="holding-amount">2.840 BNB</div></div>
+              <div class="ms-auto text-end"><div class="holding-value">$1,172</div><div class="holding-change down">▼ -0.45%</div></div>
+            </div>
+            <div class="holding-item d-flex align-items-center gap-2">
+              <div class="holding-icon" style="background:linear-gradient(135deg,#2775ca,#5dadec)">USDC</div>
+              <div><div class="holding-name">USD Coin</div><div class="holding-amount">1,378 USDC</div></div>
+              <div class="ms-auto text-end"><div class="holding-value">$1,378</div><div class="holding-change" style="color:var(--text-muted)">Stablecoin</div></div>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-6">
+          <div class="dash-card">
+            <div class="dash-card-title d-flex justify-content-between">Transaksi Terakhir <a href="#" class="dash-card-link">Semua →</a></div>
+            <div class="d-flex align-items-center gap-2 py-2 border-bottom" style="border-color:rgba(0,255,136,0.05)!important">
+              <div class="tx-icon buy">🟢</div>
+              <div><div class="tx-name">Beli BTC</div><div class="tx-time">Hari ini, 14:32</div></div>
+              <div class="tx-amount up ms-auto">+0.0050 BTC</div>
+            </div>
+            <div class="d-flex align-items-center gap-2 py-2 border-bottom" style="border-color:rgba(0,255,136,0.05)!important">
+              <div class="tx-icon sell">🔴</div>
+              <div><div class="tx-name">Jual ETH</div><div class="tx-time">Kemarin, 09:14</div></div>
+              <div class="tx-amount down ms-auto">-0.250 ETH</div>
+            </div>
+            <div class="d-flex align-items-center gap-2 py-2 border-bottom" style="border-color:rgba(0,255,136,0.05)!important">
+              <div class="tx-icon buy">🟢</div>
+              <div><div class="tx-name">Beli SOL</div><div class="tx-time">2 hari lalu, 18:45</div></div>
+              <div class="tx-amount up ms-auto">+5.0 SOL</div>
+            </div>
+            <div class="d-flex align-items-center gap-2 py-2 border-bottom" style="border-color:rgba(0,255,136,0.05)!important">
+              <div class="tx-icon buy">🟢</div>
+              <div><div class="tx-name">Deposit USDC</div><div class="tx-time">3 hari lalu, 10:20</div></div>
+              <div class="tx-amount up ms-auto">+500 USDC</div>
+            </div>
+            <div class="d-flex align-items-center gap-2 py-2">
+              <div class="tx-icon sell">🔴</div>
+              <div><div class="tx-name">Jual BNB</div><div class="tx-time">5 hari lalu, 16:00</div></div>
+              <div class="tx-amount down ms-auto">-1.0 BNB</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="../js/main.js"></script>
+  <script>
+    var d = new Date();
+    document.getElementById('dash-date').textContent = d.toLocaleDateString('id-ID', {
+      weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'
+    });
+  </script>
+</body>
+</html>

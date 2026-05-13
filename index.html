@@ -1,0 +1,550 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>CryptoVault — Next-Gen Crypto Exchange</title>
+
+  <!-- Bootstrap 5 CSS -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" />
+  <!-- Custom CSS (override & extend Bootstrap) -->
+  <link rel="stylesheet" href="css/style.css" />
+
+  <style>
+    .hero {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      padding: 8rem 0 4rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero::before {
+      content: '';
+      position: absolute;
+      top: -200px; right: -200px;
+      width: 700px; height: 700px;
+      background: radial-gradient(ellipse, rgba(0,255,136,0.06) 0%, transparent 60%);
+      pointer-events: none;
+    }
+
+    .hero-eyebrow {
+      font-family: var(--font-mono);
+      font-size: 0.72rem;
+      color: var(--accent);
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      margin-bottom: 1.2rem;
+      display: flex;
+      align-items: center;
+      gap: 0.8rem;
+    }
+
+    .hero-eyebrow::before {
+      content: '';
+      width: 30px;
+      height: 1px;
+      background: var(--accent);
+    }
+
+    .hero-title {
+      font-family: var(--font-display);
+      font-size: clamp(2.8rem, 5vw, 4.5rem);
+      font-weight: 900;
+      line-height: 1.05;
+      letter-spacing: -0.03em;
+      margin-bottom: 1.5rem;
+    }
+
+    .hero-title .line2 {
+      color: var(--accent);
+      display: block;
+      text-shadow: 0 0 30px rgba(0,255,136,0.3);
+    }
+
+    .hero-desc {
+      color: var(--text-secondary);
+      font-size: 1rem;
+      line-height: 1.8;
+      margin-bottom: 2.5rem;
+    }
+
+    .hero-stats {
+      padding-top: 2rem;
+      margin-top: 3rem;
+      border-top: 1px solid var(--border);
+    }
+
+    .stat-value {
+      font-family: var(--font-display);
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--accent);
+    }
+
+    .stat-label {
+      font-family: var(--font-mono);
+      font-size: 0.68rem;
+      color: var(--text-muted);
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      margin-top: 0.2rem;
+    }
+
+    .chart-box {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 1.5rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .chart-box::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--accent), transparent);
+    }
+
+    .coin-icon {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #f7931a, #ffb347);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: var(--font-display);
+      font-size: 0.7rem;
+      font-weight: 700;
+      color: white;
+      flex-shrink: 0;
+    }
+
+    .coin-name { font-family: var(--font-display); font-size: 0.9rem; font-weight: 600; }
+    .coin-symbol { font-family: var(--font-mono); font-size: 0.7rem; color: var(--text-muted); }
+    .price-value { font-family: var(--font-display); font-size: 1.4rem; font-weight: 700; }
+    .price-change { font-family: var(--font-mono); font-size: 0.75rem; color: var(--accent); }
+
+    .mini-chart svg { width: 100%; height: 120px; }
+
+    .float-card {
+      background: rgba(0,255,136,0.04);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      padding: 0.8rem 1rem;
+    }
+
+    .float-label {
+      font-family: var(--font-mono);
+      font-size: 0.65rem;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      margin-bottom: 0.3rem;
+    }
+
+    .float-value { font-family: var(--font-mono); font-size: 0.85rem; }
+
+    .feature-icon { font-size: 1.8rem; margin-bottom: 1.2rem; display: block; }
+
+    .feature-title {
+      font-family: var(--font-display);
+      font-size: 0.95rem;
+      font-weight: 600;
+      letter-spacing: 0.05em;
+      margin-bottom: 0.7rem;
+    }
+
+    .feature-desc { color: var(--text-secondary); font-size: 0.87rem; line-height: 1.7; }
+
+    .coin-dot {
+      width: 32px; height: 32px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: var(--font-display);
+      font-size: 0.6rem;
+      font-weight: 700;
+      color: #fff;
+      flex-shrink: 0;
+    }
+
+    .coin-fullname { font-size: 0.78rem; color: var(--text-muted); font-family: var(--font-mono); }
+
+    .step-number { font-family: var(--font-display); font-size: 0.7rem; color: var(--accent); letter-spacing: 0.2em; margin-bottom: 0.8rem; }
+    .step-icon { font-size: 2rem; margin-bottom: 1rem; display: block; }
+    .step-title { font-family: var(--font-display); font-size: 0.9rem; font-weight: 600; margin-bottom: 0.5rem; }
+    .step-desc { color: var(--text-secondary); font-size: 0.82rem; line-height: 1.65; }
+
+    .cta-box {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 4rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .cta-box::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse at center, rgba(0,255,136,0.04) 0%, transparent 70%);
+    }
+
+    @media (max-width: 576px) {
+      .cta-box { padding: 2.5rem 1.5rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAVBAR -->
+  <nav class="cv-nav">
+    <a href="index.html" class="nav-logo">CryptoVault</a>
+    <ul class="nav-links">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="pages/market.html">Market</a></li>
+      <li><a href="pages/dashboard.html">Dashboard</a></li>
+      <li><a href="pages/about.html">About</a></li>
+      <li><a href="pages/contact.html">Contact</a></li>
+    </ul>
+    <div class="nav-cta">
+      <a href="pages/signin.html" class="btn-cv btn-cv-outline">Sign In</a>
+      <a href="pages/signup.html" class="btn-cv btn-cv-primary">Sign Up</a>
+    </div>
+    <button class="hamburger" id="hamburger" aria-label="Menu">
+      <span></span><span></span><span></span>
+    </button>
+  </nav>
+
+  <div class="cv-mobile-menu" id="cv-mobile-menu">
+    <a href="index.html">Home</a>
+    <a href="pages/market.html">Market</a>
+    <a href="pages/dashboard.html">Dashboard</a>
+    <a href="pages/about.html">About</a>
+    <a href="pages/contact.html">Contact</a>
+    <a href="pages/signin.html">Sign In</a>
+    <a href="pages/signup.html">Sign Up</a>
+  </div>
+
+  <!-- HERO — Bootstrap row/col untuk grid responsif -->
+  <section class="hero">
+    <div class="container">
+      <div class="row align-items-center g-5">
+        <div class="col-lg-6" data-aos>
+          <div class="hero-eyebrow">Platform Trading Kripto #1</div>
+          <h1 class="hero-title">
+            Trade Smarter,<br>
+            <span class="line2">Earn Faster.</span>
+          </h1>
+          <p class="hero-desc">
+            Platform exchange kripto next-gen dengan keamanan tingkat militer, likuiditas terdalam, dan eksekusi order kilat.
+          </p>
+          <!-- Bootstrap d-flex gap-3 untuk tombol -->
+          <div class="d-flex gap-3 flex-wrap">
+            <a href="pages/signup.html" class="btn-cv btn-cv-primary btn-cv-lg">Mulai Sekarang</a>
+            <a href="pages/market.html" class="btn-cv btn-cv-outline btn-cv-lg">Lihat Market</a>
+          </div>
+          <!-- Bootstrap row untuk stats -->
+          <div class="hero-stats">
+            <div class="row g-0">
+              <div class="col-4">
+                <div class="stat-value">$2.4B+</div>
+                <div class="stat-label">Volume 24H</div>
+              </div>
+              <div class="col-4">
+                <div class="stat-value">1.2M+</div>
+                <div class="stat-label">Pengguna Aktif</div>
+              </div>
+              <div class="col-4">
+                <div class="stat-value">350+</div>
+                <div class="stat-label">Koin Listed</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-lg-6" data-aos data-delay="2">
+          <div class="chart-box">
+            <div class="d-flex justify-content-between align-items-start mb-3">
+              <div class="d-flex align-items-center gap-2">
+                <div class="coin-icon">BTC</div>
+                <div>
+                  <div class="coin-name">Bitcoin</div>
+                  <div class="coin-symbol">BTC/USDT</div>
+                </div>
+              </div>
+              <div class="text-end">
+                <div class="price-value">$79,420</div>
+                <div class="price-change">▲ +2.14%</div>
+              </div>
+            </div>
+            <div class="mini-chart">
+              <svg viewBox="0 0 300 120" xmlns="http://www.w3.org/2000/svg">
+                <defs>
+                  <linearGradient id="cg" x1="0%" y1="0%" x2="0%" y2="100%">
+                    <stop offset="0%" style="stop-color:rgba(0,255,136,0.3)" />
+                    <stop offset="100%" style="stop-color:rgba(0,255,136,0)" />
+                  </linearGradient>
+                </defs>
+                <path d="M0,90 L20,82 L40,88 L60,70 L80,75 L100,55 L120,60 L140,40 L160,45 L180,28 L200,35 L220,20 L240,25 L260,10 L280,15 L300,8"
+                  stroke="#00ff88" stroke-width="2" fill="none" />
+                <path d="M0,90 L20,82 L40,88 L60,70 L80,75 L100,55 L120,60 L140,40 L160,45 L180,28 L200,35 L220,20 L240,25 L260,10 L280,15 L300,8 L300,120 L0,120 Z"
+                  fill="url(#cg)" />
+              </svg>
+            </div>
+            <!-- Bootstrap row/col untuk float cards -->
+            <div class="row g-2 mt-1">
+              <div class="col-6"><div class="float-card"><div class="float-label">24H High</div><div class="float-value up">$68,100</div></div></div>
+              <div class="col-6"><div class="float-card"><div class="float-label">24H Low</div><div class="float-value down">$65,890</div></div></div>
+              <div class="col-6"><div class="float-card"><div class="float-label">Volume</div><div class="float-value">$1.2B</div></div></div>
+              <div class="col-6"><div class="float-card"><div class="float-label">Market Cap</div><div class="float-value">$1.3T</div></div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- TICKER -->
+  <div class="ticker-bar">
+    <div class="ticker-track"></div>
+  </div>
+
+  <!-- FEATURES — Bootstrap row/col grid -->
+  <section class="py-5 my-4">
+    <div class="container">
+      <div class="mb-5" data-aos>
+        <div class="section-tag">Kenapa CryptoVault</div>
+        <h2 class="section-title">Dibangun untuk <span class="highlight">Trader Serius</span></h2>
+        <p class="section-sub">Setiap fitur dirancang untuk memberikan keunggulan kompetitif di pasar kripto yang bergerak cepat.</p>
+      </div>
+      <!-- Bootstrap row dengan col responsif -->
+      <div class="row g-4">
+        <div class="col-md-6 col-lg-4" data-aos data-delay="1">
+          <div class="cv-card h-100">
+            <span class="feature-icon">⚡</span>
+            <div class="feature-title">Eksekusi Ultra-Cepat</div>
+            <p class="feature-desc">Engine matching order kami mampu memproses 1.4 juta transaksi per detik dengan latensi di bawah 10ms.</p>
+          </div>
+        </div>
+        <div class="col-md-6 col-lg-4" data-aos data-delay="2">
+          <div class="cv-card h-100">
+            <span class="feature-icon">🔐</span>
+            <div class="feature-title">Keamanan Bank-Grade</div>
+            <p class="feature-desc">Multi-layer encryption, 2FA wajib, cold storage 95%, dan asuransi aset digital hingga $250 juta.</p>
+          </div>
+        </div>
+        <div class="col-md-6 col-lg-4" data-aos data-delay="3">
+          <div class="cv-card h-100">
+            <span class="feature-icon">📊</span>
+            <div class="feature-title">Chart Pro</div>
+            <p class="feature-desc">Tools analisis teknikal lengkap: 100+ indikator, multi-timeframe, drawing tools, dan alert custom.</p>
+          </div>
+        </div>
+        <div class="col-md-6 col-lg-4" data-aos data-delay="1">
+          <div class="cv-card h-100">
+            <span class="feature-icon">💸</span>
+            <div class="feature-title">Fee Terendah</div>
+            <p class="feature-desc">Fee maker mulai 0.01%. Semakin tinggi volume trading, semakin rendah biaya yang kamu bayar.</p>
+          </div>
+        </div>
+        <div class="col-md-6 col-lg-4" data-aos data-delay="2">
+          <div class="cv-card h-100">
+            <span class="feature-icon">🌍</span>
+            <div class="feature-title">350+ Pasangan Trading</div>
+            <p class="feature-desc">Akses ke ratusan altcoin, DeFi token, NFT tokens, dan stablecoin terpopuler di satu platform.</p>
+          </div>
+        </div>
+        <div class="col-md-6 col-lg-4" data-aos data-delay="3">
+          <div class="cv-card h-100">
+            <span class="feature-icon">🤖</span>
+            <div class="feature-title">Trading Bot API</div>
+            <p class="feature-desc">REST & WebSocket API dengan dokumentasi lengkap. Otomatisasi strategi trading kamu 24/7.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- MARKET PREVIEW — Bootstrap table -->
+  <section class="py-5 my-4">
+    <div class="container">
+      <div class="mb-4" data-aos>
+        <div class="section-tag">Live Market</div>
+        <h2 class="section-title">Harga <span class="highlight">Crypto</span> Terkini</h2>
+      </div>
+      <!-- Bootstrap table-responsive untuk scroll di mobile -->
+      <div class="table-responsive" data-aos>
+        <table class="table table-hover align-middle">
+          <thead>
+            <tr>
+              <th>#</th><th>Coin</th><th>Harga</th><th>24H</th><th class="d-none d-md-table-cell">Volume</th><th>7D</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="font-mono" style="color:var(--text-muted);font-size:0.8rem">01</td>
+              <td><div class="d-flex align-items-center gap-2"><div class="coin-dot" style="background:linear-gradient(135deg,#f7931a,#ffb347)">BTC</div><div><div>Bitcoin</div><div class="coin-fullname">BTC</div></div></div></td>
+              <td class="font-mono">$67,420.50</td>
+              <td class="up font-mono">+2.14%</td>
+              <td class="d-none d-md-table-cell font-mono" style="color:var(--text-secondary)">$1.2B</td>
+              <td><svg width="80" height="28" viewBox="0 0 80 28"><polyline points="0,22 13,18 26,20 39,12 52,14 65,6 80,4" stroke="#00ff88" stroke-width="1.5" fill="none"/></svg></td>
+            </tr>
+            <tr>
+              <td class="font-mono" style="color:var(--text-muted);font-size:0.8rem">02</td>
+              <td><div class="d-flex align-items-center gap-2"><div class="coin-dot" style="background:linear-gradient(135deg,#627eea,#a78bfa)">ETH</div><div><div>Ethereum</div><div class="coin-fullname">ETH</div></div></div></td>
+              <td class="font-mono">$3,512.80</td>
+              <td class="up font-mono">+1.87%</td>
+              <td class="d-none d-md-table-cell font-mono" style="color:var(--text-secondary)">$854M</td>
+              <td><svg width="80" height="28" viewBox="0 0 80 28"><polyline points="0,18 13,15 26,20 39,10 52,12 65,8 80,5" stroke="#00ff88" stroke-width="1.5" fill="none"/></svg></td>
+            </tr>
+            <tr>
+              <td class="font-mono" style="color:var(--text-muted);font-size:0.8rem">03</td>
+              <td><div class="d-flex align-items-center gap-2"><div class="coin-dot" style="background:linear-gradient(135deg,#9945ff,#14f195)">SOL</div><div><div>Solana</div><div class="coin-fullname">SOL</div></div></div></td>
+              <td class="font-mono">$182.40</td>
+              <td class="up font-mono">+4.23%</td>
+              <td class="d-none d-md-table-cell font-mono" style="color:var(--text-secondary)">$412M</td>
+              <td><svg width="80" height="28" viewBox="0 0 80 28"><polyline points="0,24 13,20 26,22 39,14 52,10 65,5 80,2" stroke="#00ff88" stroke-width="1.5" fill="none"/></svg></td>
+            </tr>
+            <tr>
+              <td class="font-mono" style="color:var(--text-muted);font-size:0.8rem">04</td>
+              <td><div class="d-flex align-items-center gap-2"><div class="coin-dot" style="background:linear-gradient(135deg,#f0b90b,#fcd535)">BNB</div><div><div>BNB</div><div class="coin-fullname">BNB</div></div></div></td>
+              <td class="font-mono">$412.60</td>
+              <td class="down font-mono">-0.45%</td>
+              <td class="d-none d-md-table-cell font-mono" style="color:var(--text-secondary)">$298M</td>
+              <td><svg width="80" height="28" viewBox="0 0 80 28"><polyline points="0,8 13,10 26,8 39,14 52,16 65,14 80,18" stroke="#ff4466" stroke-width="1.5" fill="none"/></svg></td>
+            </tr>
+            <tr>
+              <td class="font-mono" style="color:var(--text-muted);font-size:0.8rem">05</td>
+              <td><div class="d-flex align-items-center gap-2"><div class="coin-dot" style="background:linear-gradient(135deg,#2775ca,#5dadec)">USDC</div><div><div>USD Coin</div><div class="coin-fullname">USDC</div></div></div></td>
+              <td class="font-mono">$1.00</td>
+              <td class="font-mono" style="color:var(--text-muted)">+0.01%</td>
+              <td class="d-none d-md-table-cell font-mono" style="color:var(--text-secondary)">$6.1B</td>
+              <td><svg width="80" height="28" viewBox="0 0 80 28"><polyline points="0,14 20,14 40,14 60,14 80,14" stroke="var(--text-muted)" stroke-width="1.5" fill="none"/></svg></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="text-center mt-4" data-aos>
+        <a href="pages/market.html" class="btn-cv btn-cv-outline btn-cv-lg">Lihat Semua 350+ Koin →</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- HOW IT WORKS — Bootstrap row/col -->
+  <section class="py-5 my-4">
+    <div class="container">
+      <div class="text-center mb-5" data-aos>
+        <div class="section-tag justify-content-center">Cara Kerja</div>
+        <h2 class="section-title">Mulai Trading dalam <span class="highlight">4 Langkah</span></h2>
+      </div>
+      <div class="row g-4">
+        <div class="col-sm-6 col-lg-3" data-aos data-delay="1">
+          <div class="cv-card text-center h-100">
+            <div class="step-number">STEP 01</div>
+            <span class="step-icon">📝</span>
+            <div class="step-title">Daftar Akun</div>
+            <p class="step-desc">Buat akun gratis dalam 2 menit dengan email dan password.</p>
+          </div>
+        </div>
+        <div class="col-sm-6 col-lg-3" data-aos data-delay="2">
+          <div class="cv-card text-center h-100">
+            <div class="step-number">STEP 02</div>
+            <span class="step-icon">✅</span>
+            <div class="step-title">Verifikasi KYC</div>
+            <p class="step-desc">Upload KTP dan selfie untuk verifikasi identitas otomatis.</p>
+          </div>
+        </div>
+        <div class="col-sm-6 col-lg-3" data-aos data-delay="3">
+          <div class="cv-card text-center h-100">
+            <div class="step-number">STEP 03</div>
+            <span class="step-icon">💳</span>
+            <div class="step-title">Deposit Dana</div>
+            <p class="step-desc">Transfer IDR via bank lokal atau deposit kripto langsung.</p>
+          </div>
+        </div>
+        <div class="col-sm-6 col-lg-3" data-aos data-delay="4">
+          <div class="cv-card text-center h-100">
+            <div class="step-number">STEP 04</div>
+            <span class="step-icon">🚀</span>
+            <div class="step-title">Mulai Trading</div>
+            <p class="step-desc">Pilih pasangan trading dan eksekusi order pertamamu!</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="py-5 my-4">
+    <div class="container">
+      <div class="cta-box text-center" data-aos>
+        <div class="section-tag justify-content-center">Bergabung Sekarang</div>
+        <h2 class="section-title">Siap Memulai Perjalanan <span class="highlight">Kripto</span>-mu?</h2>
+        <p style="color:var(--text-secondary);margin-bottom:2rem">Bergabunglah bersama 1.2 juta trader yang sudah mempercayai CryptoVault.</p>
+        <a href="pages/signup.html" class="btn-cv btn-cv-primary btn-cv-lg">Buat Akun Gratis</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER — Bootstrap row/col grid -->
+  <footer class="cv-footer">
+    <div class="container">
+      <div class="row g-4 mb-4">
+        <div class="col-lg-5 col-md-12">
+          <a href="index.html" class="nav-logo d-inline-flex mb-3">CryptoVault</a>
+          <p class="footer-desc">Platform exchange kripto terpercaya dengan keamanan tertinggi untuk trader Indonesia.</p>
+          <!-- Bootstrap d-flex gap-2 untuk badges -->
+          <div class="d-flex gap-2 flex-wrap">
+            <span class="badge badge-cv-green">● Live</span>
+            <span class="badge badge-cv-blue">Terdaftar OJK</span>
+          </div>
+        </div>
+        <div class="col-6 col-md-3 col-lg-2 offset-lg-1">
+          <div class="footer-col-title">Platform</div>
+          <ul class="footer-links">
+            <li><a href="pages/market.html">Market</a></li>
+            <li><a href="pages/dashboard.html">Dashboard</a></li>
+            <li><a href="pages/signin.html">Sign In</a></li>
+            <li><a href="pages/signup.html">Sign Up</a></li>
+          </ul>
+        </div>
+        <div class="col-6 col-md-3 col-lg-2">
+          <div class="footer-col-title">Perusahaan</div>
+          <ul class="footer-links">
+            <li><a href="pages/about.html">About Us</a></li>
+            <li><a href="pages/contact.html">Contact</a></li>
+            <li><a href="#">Karir</a></li>
+            <li><a href="#">Blog</a></li>
+          </ul>
+        </div>
+        <div class="col-6 col-md-3 col-lg-2">
+          <div class="footer-col-title">Legal</div>
+          <ul class="footer-links">
+            <li><a href="#">Privacy Policy</a></li>
+            <li><a href="#">Terms of Service</a></li>
+            <li><a href="#">Cookie Policy</a></li>
+            <li><a href="#">AML Policy</a></li>
+          </ul>
+        </div>
+      </div>
+      <!-- Bootstrap d-flex justify-content-between untuk footer bottom -->
+      <div class="footer-bottom d-flex justify-content-between align-items-center flex-wrap gap-2">
+        <span>© 2024 CryptoVault. All rights reserved.</span>
+        <span class="font-mono">v2.4.1 — <span class="up">●</span> All systems operational</span>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Bootstrap 5 JS Bundle (termasuk Popper) -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="js/main.js"></script>
+</body>
+</html>
