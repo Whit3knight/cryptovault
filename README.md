@@ -6,12 +6,12 @@ Platform exchange kripto next-gen — dark cyberpunk theme.
 
 ```
 cryptovault/
-├── index.html          ← Home
+├── index.html     
 ├── README.md
 ├── css/
-│   └── style.css       ← CSS custom + Bootstrap overrides
+│   └── style.css    
 ├── js/
-│   └── main.js         ← JS bersama (hamburger, ticker, AOS)
+│   └── main.js       
 └── pages/
     ├── market.html
     ├── dashboard.html
