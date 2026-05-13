@@ -31,18 +31,16 @@ cryptovault/
 
 **`pages/*.html`** — Memanggil `../css/style.css` dan `../js/main.js` (naik satu level).
 
-## Bootstrap 5 — Di Mana dan Apa Saja
+## Bootstrap 5
 
 Bootstrap di-load via CDN di setiap halaman:
 ```html
-<!-- CSS Bootstrap (di <head>, sebelum style.css) -->
+<!-- CSS Bootstrap -->
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" />
 
-<!-- JS Bootstrap Bundle (di akhir <body>) -->
+<!-- JS Bootstrap Bundle -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 ```
-
-Bootstrap CSS wajib dimuat **sebelum** `style.css` agar override custom bisa bekerja.
 
 ### Penggunaan Bootstrap per Halaman
 
@@ -58,20 +56,3 @@ Bootstrap CSS wajib dimuat **sebelum** `style.css` agar override custom bisa bek
 | `modal` + `data-bs-toggle="modal"` | Dashboard — Deposit & Withdraw |
 | `badge` (dengan custom class) | Home, About |
 | `h-100`, `text-center`, `align-items-center` | Semua halaman — utility |
-
-`style.css` meng-override tampilan Bootstrap agar semua komponen mengikuti tema dark cyberpunk (warna, font, border, glow).
-
-## Deploy ke GitHub Pages
-
-```bash
-git init
-git add .
-git commit -m "Initial commit"
-git branch -M main
-git remote add origin https://github.com/USERNAME/cryptovault.git
-git push -u origin main
-```
-
-Buka repo → **Settings → Pages → Source: `main` / `/ (root)`** → Save.
-
-Akses: `https://USERNAME.github.io/cryptovault/`
